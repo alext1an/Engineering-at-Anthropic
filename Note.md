@@ -60,3 +60,8 @@ not every multi-LLM system is "multi-agent." The terminology gets sloppy.
 Multi-agent: at least one of the participants has its own agent loop (plan → act → observe → repeat) inside the larger system. The research system is multi-agent because subagents themselves call tools in loops.
 
 A separate evaluator has a different context window and a different prompt; it doesn't see the generator's reasoning, only the generator's output. It can't be "primed" by the work it's evaluating. This isn't about model identity (you can use the same model class); it's about context isolation. The evaluator hasn't already convinced itself the work is good.
+
+Orchestrator-Worker Failure modes to consider:
+- Orchestrator might not break down tasks optimally (prompt engineering is critical)
+- Workers may return empty or malformed responses (we handle this with validation)
+- XML parsing can fail if models don't follow format exactly (consider using JSON as an alternative)
