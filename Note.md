@@ -65,3 +65,18 @@ Orchestrator-Worker Failure modes to consider:
 - Orchestrator might not break down tasks optimally (prompt engineering is critical)
 - Workers may return empty or malformed responses (we handle this with validation)
 - XML parsing can fail if models don't follow format exactly (consider using JSON as an alternative)
+
+Build-evaluate-iterate workflowfor developing effective tools
+The cycle: run evals → get transcripts → Claude analyzes → refine tool definitions → repeat.
+
+Fortunately, in our experience, the tools that are most “ergonomic” for agents also end up being surprisingly intuitive to grasp as humans.
+
+Even your tool response structure—for example XML, JSON, or Markdown—can have an impact on evaluation performance: there is no one-size-fits-all solution. This is because LLMs are trained on next-token prediction and tend to perform better with formats that match their training data. The optimal response structure will vary widely by task and agent. We encourage you to select the best response structure based on your own evaluation.
+
+Advanced tool design: 
+
+Three distinct bottlenecks need three distinct fixes. Definition overload → Tool Search. Context pollution → Programmatic Tool Calling. Schema ambiguity → Tool Use Examples. Misdiagnosing the bottleneck means applying the wrong fix.
+PTC keeps data in code, not in context. The model writes code that runs in a sandbox; only the final filtered result reaches the model's context. This is the mechanism behind 85%+ token reductions on data-heavy workflows.
+Parallel execution requires deliberate design. Sequential tool calls are the default. The batch tool pattern and explicit parallel invocation make independent calls concurrent — and the research system's 90% time reduction shows this matters at scale.
+Examples communicate what schema cannot. JSON schema specifies structure; examples communicate convention, idiom, and typical usage. The 72% → 90% accuracy improvement from examples is structurally similar to the tool description engineering gains from Module 03.
+Layer features starting from your biggest bottleneck. Adding all three advanced features simultaneously makes failures harder to diagnose. Identify the dominant bottleneck, fix it, measure, then layer.
