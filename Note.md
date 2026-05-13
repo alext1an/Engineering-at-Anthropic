@@ -80,3 +80,27 @@ PTC keeps data in code, not in context. The model writes code that runs in a san
 Parallel execution requires deliberate design. Sequential tool calls are the default. The batch tool pattern and explicit parallel invocation make independent calls concurrent — and the research system's 90% time reduction shows this matters at scale.
 Examples communicate what schema cannot. JSON schema specifies structure; examples communicate convention, idiom, and typical usage. The 72% → 90% accuracy improvement from examples is structurally similar to the tool description engineering gains from Module 03.
 Layer features starting from your biggest bottleneck. Adding all three advanced features simultaneously makes failures harder to diagnose. Identify the dominant bottleneck, fix it, measure, then layer.
+
+What PTC is
+
+Claude writes orchestration code instead of calling tools one by one
+The sandbox executes the entire code block end-to-end
+Claude only sees the code it wrote + the final result, not intermediate data
+Why it saves tokens
+
+Raw data (e.g. 300 expense records) stays inside the sandbox
+Only the aggregated result enters Claude's context window
+What the sandbox actually is
+
+Anthropic's built-in sandbox, or E2B, or local exec() — all functionally equivalent
+The sandbox still calls your local tool functions via API callback, it doesn't have direct access to them
+You don't always need a sandbox
+
+Standard tool calling handles most agent scenarios
+Only reach for PTC when: data is too large for context, or orchestration logic needs to be dynamic
+
+The main tradeoff
+
+PTC reduces tokens and round-trips, but loses observability
+Hard to debug when something goes wrong inside the sandbox
+Best adopted after your pipeline is already stable
