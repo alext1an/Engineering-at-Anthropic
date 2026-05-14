@@ -104,3 +104,19 @@ The main tradeoff
 PTC reduces tokens and round-trips, but loses observability
 Hard to debug when something goes wrong inside the sandbox
 Best adopted after your pipeline is already stable
+
+Extended thinking & Think tool
+
+The meta-principle: the think tool is a structured interrupt — a forced pause before consequential actions. The optimized prompt defines what the model should do during that pause.
+
+extended thinking adds token cost — don't enable it for tasks where the challenge is recall, not reasoning.
+
+The optimized prompt for think tool specifies when to think (after every tool result) and what to analyze (rules, completeness, compliance, correctness).
+
+Stripping thinking blocks to save tokens breaks the conversation contract.
+
+Timing is the key variable. Extended thinking = reasoning before execution. Think tool = reasoning during execution, after receiving tool results. Match the feature to where the reasoning challenge occurs.
+The optimized prompt captures most of the gain. Making the think tool available adds ~9% on hard tasks; adding a prompt that specifies when and what to think adds ~54%. The tool creates the capability; the prompt creates reliable behavior.
+Think tool scales with task difficulty. For easy tasks it adds noise; for hard, policy-heavy, multi-step tool chains it substantially improves accuracy and consistency.
+Thinking block signatures must be preserved. Omitting thinking blocks from conversation history when extended thinking is enabled causes a 400 error. The model's coherence across multi-turn tool use depends on its prior reasoning remaining intact.
+Neither is universally beneficial. Both add token cost. Apply extended thinking for hard reasoning tasks without mid-execution branching; apply the think tool for sequential tool chains where each result requires careful analysis before the next action.
