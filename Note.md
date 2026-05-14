@@ -120,3 +120,25 @@ The optimized prompt captures most of the gain. Making the think tool available 
 Think tool scales with task difficulty. For easy tasks it adds noise; for hard, policy-heavy, multi-step tool chains it substantially improves accuracy and consistency.
 Thinking block signatures must be preserved. Omitting thinking blocks from conversation history when extended thinking is enabled causes a 400 error. The model's coherence across multi-turn tool use depends on its prior reasoning remaining intact.
 Neither is universally beneficial. Both add token cost. Apply extended thinking for hard reasoning tasks without mid-execution branching; apply the think tool for sequential tool chains where each result requires careful analysis before the next action.
+
+```
+think_tool = {
+    "name": "think",
+    "description": "Use the tool to think about something. It will not obtain new information or change the database, but just append the thought to the log. Use it when complex reasoning or some cache memory is needed.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "thought": {"type": "string", "description": "A thought to think about."}
+        },
+        "required": ["thought"]
+    }
+}
+```
+
+```
+Before taking any action after receiving tool results, use the think tool as a scratchpad to:
+- List specific rules applying to the current request
+- Check if all required information is collected
+- Verify planned action complies with all policies
+- Iterate over tool results for correctness
+```
